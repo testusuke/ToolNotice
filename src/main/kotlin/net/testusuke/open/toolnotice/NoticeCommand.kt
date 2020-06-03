@@ -43,6 +43,7 @@ object NoticeCommand:CommandExecutor {
         }
         if(enabled == boolean){
             player.sendMessage("${prefix}§cすでに${boolean}になっています。")
+            return
         }
         enabled = boolean
         player.sendMessage("${prefix}§aプラグインを${boolean}に変更しました。")
