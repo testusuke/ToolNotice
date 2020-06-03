@@ -11,7 +11,7 @@ import org.bukkit.entity.Player
 object NoticeCommand:CommandExecutor {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if(sender !is Player || sender.hasPermission(plugin.generalPermission))return false
+        if(sender !is Player || !sender.hasPermission(plugin.generalPermission))return false
 
         if(args.isEmpty()){
             changeBreakMode(sender)
@@ -37,7 +37,7 @@ object NoticeCommand:CommandExecutor {
     }
 
     private fun changeEnabled(player: Player,boolean: Boolean){
-        if(player.hasPermission(plugin.adminPermission)){
+        if(!player.hasPermission(plugin.adminPermission)){
             player.sendMessage("${prefix}§cあなたには権限がありません。")
             return
         }
@@ -45,7 +45,7 @@ object NoticeCommand:CommandExecutor {
             player.sendMessage("${prefix}§cすでに${boolean}になっています。")
         }
         enabled = boolean
-        player.sendMessage("${prefix}§aBan機能を${boolean}に変更しました。")
+        player.sendMessage("${prefix}§aプラグインを${boolean}に変更しました。")
     }
 
     private fun sendHelp(player: Player){
