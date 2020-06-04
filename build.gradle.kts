@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "net.testusuke"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     mavenCentral()
@@ -30,7 +30,7 @@ bukkit {
 }
 
 dependencies {
-    compileOnly ("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    compile ("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT")
 }
 
