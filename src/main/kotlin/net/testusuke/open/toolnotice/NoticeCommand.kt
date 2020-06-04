@@ -64,6 +64,10 @@ object NoticeCommand:CommandExecutor {
     }
 
     private fun changeBreakMode(player: Player){
+        if(!enabled){
+            player.sendMessage("${prefix}§c現在利用できません。")
+            return
+        }
         val boolean = PlayerData.get(player)
         if(boolean){
             PlayerData.set(player,false)

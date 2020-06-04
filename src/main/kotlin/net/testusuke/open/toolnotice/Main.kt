@@ -44,7 +44,6 @@ class Main : JavaPlugin() {
     private fun loadData() {
         try {
             enabled = config.getBoolean("mode")
-            prefix = config.getString("prefix").toString().replace("&", "§")
         } catch (e: NullPointerException) {
             e.printStackTrace()
         }
