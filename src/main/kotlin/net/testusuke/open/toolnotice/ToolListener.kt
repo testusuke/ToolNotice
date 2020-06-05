@@ -12,6 +12,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerItemDamageEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 
 object ToolListener : Listener {
@@ -105,9 +106,9 @@ object ToolListener : Listener {
         val player = event.player
         if (!PlayerData.get(player)) return
         val item: ItemStack = player.inventory.itemInMainHand
-        val material = item.type
-        if (material.isAir) return
-        if (!toolMaterial.contains(material)) return
+        val itemMaterial = item.type
+        if (itemMaterial.isAir) return
+        if (!toolMaterial.contains(itemMaterial)) return
         val max = item.type.maxDurability
         val now = max - item.durability
         if (now <= 2) {
@@ -118,16 +119,42 @@ object ToolListener : Listener {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component)
             //  autochange
             if (plugin.autoChangeEnabled) {
-                val material = item.type
-                val toolType:ToolType = materialOfTool[material] ?: return
+                val toolType:ToolType = materialOfTool[itemMaterial] ?: return
                 val materialList = toolType.getMaterialList()
                 val inv = player.inventory
-                inv.itemInMainHand
-                for(material in materialList){
+                inv.setItemInMainHand(ItemStack(Material.AIR))
 
+                var discovered = false
+                for(material in materialList){
+                    if(discovered){
+                        break
+                    }
+                    if(inv.contains(material)){
+                        val itemStackList = getItemStackListFromMaterial(inv,material)
+                        for (itemInInventory in itemStackList){
+                            val max = item.type.maxDurability
+                            val now = max - item.durability
+                            if(now > 2){
+                                inv.setItemInMainHand(itemInInventory)
+                                inv.addItem(item)
+                                discovered = true
+                                break
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private fun getItemStackListFromMaterial(inventory:Inventory,material:Material):MutableList<ItemStack> {
+        val list = mutableListOf<ItemStack>()
+        for(item in inventory.contents){
+            if(item.type == material){
+                list.add(item)
+            }
+        }
+        return list
     }
 
     @EventHandler
