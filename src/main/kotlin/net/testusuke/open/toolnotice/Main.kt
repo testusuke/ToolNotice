@@ -36,7 +36,6 @@ class Main : JavaPlugin() {
     }
 
     override fun onDisable() {
-
         //  Config
         saveData()
         saveConfig()

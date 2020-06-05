@@ -74,10 +74,7 @@ object ToolListener : Listener {
     }
 
     /**
-     * Material -> Int(ツール識別番号)
-     * 0 -> ピッケル
-     * 1 -> オノ
-     * 2 -> シャベル
+     * Material -> ToolType
      */
     private val materialOfTool: MutableMap<Material, ToolType> by lazy {
         val mutableMap = mutableMapOf<Material, ToolType>()
