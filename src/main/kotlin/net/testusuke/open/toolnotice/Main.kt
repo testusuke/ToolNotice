@@ -13,7 +13,8 @@ class Main : JavaPlugin() {
 
     val generalPermission = "toolnotice.general"
     val adminPermission = "toolnotice.admin"
-
+    //  ChangeTool
+    var autoChangeEnabled:Boolean = false
     private val pluginName = "ToolNotice"
 
     override fun onEnable() {
@@ -44,6 +45,7 @@ class Main : JavaPlugin() {
     private fun loadData() {
         try {
             enabled = config.getBoolean("mode")
+            autoChangeEnabled = config.getBoolean("autochange")
         } catch (e: NullPointerException) {
             e.printStackTrace()
         }
@@ -51,6 +53,7 @@ class Main : JavaPlugin() {
 
     private fun saveData() {
         config.set("mode", enabled)
+        config.set("autochange",autoChangeEnabled)
         saveConfig()
     }
 }

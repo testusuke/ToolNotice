@@ -23,13 +23,28 @@ object NoticeCommand:CommandExecutor {
             "on" -> changeEnabled(sender,true)
             "off" -> changeEnabled(sender,false)
             "reload" -> {
-                if(sender.hasPermission(plugin.adminPermission)){
+                return if(sender.hasPermission(plugin.adminPermission)){
                     sender.sendMessage("${prefix}§aコンフィグを再読み込みしました。")
                     plugin.reloadConfig()
-                    return true
+                    true
                 }else{
                     sender.sendMessage("${prefix}§cあなたには権限がありません。")
-                    return true
+                    true
+                }
+            }
+            "autochange" -> {
+                if(!sender.hasPermission(plugin.adminPermission)){
+                    sender.sendMessage("${prefix}§あなたには権限がありません。")
+                    return false
+                }
+                when(args[1]){
+                    "on" -> changeAutoEnabled(sender,true)
+                    "off" -> changeAutoEnabled(sender,false)
+                    else -> {
+                        sender.sendMessage("${prefix}§c使い方が不正です。")
+                        sendHelp(sender)
+                        return false
+                    }
                 }
             }
         }
@@ -47,6 +62,15 @@ object NoticeCommand:CommandExecutor {
         }
         enabled = boolean
         player.sendMessage("${prefix}§aプラグインを${boolean}に変更しました。")
+    }
+
+    private fun changeAutoEnabled(player: Player,boolean: Boolean){
+        if(plugin.autoChangeEnabled == boolean){
+            player.sendMessage("${prefix}§cすでに${boolean}になっています。")
+            return
+        }
+        plugin.autoChangeEnabled = boolean
+        player.sendMessage("${prefix}§aAutoChangeを${boolean}に変更しました。")
     }
 
     private fun sendHelp(player: Player){
