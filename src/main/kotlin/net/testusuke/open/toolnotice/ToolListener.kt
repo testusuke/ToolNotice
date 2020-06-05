@@ -132,9 +132,9 @@ object ToolListener : Listener {
                     if(inv.contains(material)){
                         val itemStackList = getItemStackListFromMaterial(inv,material)
                         for (itemInInventory in itemStackList){
-                            val max = item.type.maxDurability
-                            val now = max - item.durability
-                            if(now > 2){
+                            val maxInInventory = item.type.maxDurability
+                            val nowInInventory = maxInInventory - item.durability
+                            if(nowInInventory > 2){
                                 inv.setItemInMainHand(itemInInventory)
                                 inv.addItem(item)
                                 discovered = true
