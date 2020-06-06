@@ -122,7 +122,7 @@ object ToolListener : Listener {
                 val toolType:ToolType = materialOfTool[itemMaterial] ?: return
                 val materialList = toolType.getMaterialList()
                 val inv = player.inventory
-                inv.setItemInMainHand(ItemStack(Material.AIR))
+                //inv.setItemInMainHand(ItemStack(Material.AIR))
 
                 var discovered = false
                 for(material in materialList){
@@ -132,9 +132,10 @@ object ToolListener : Listener {
                     if(inv.contains(material)){
                         val itemStackList = getItemStackListFromMaterial(inv,material)
                         for (itemInInventory in itemStackList){
-                            val maxInInventory = item.type.maxDurability
-                            val nowInInventory = maxInInventory - item.durability
+                            val maxInInventory = itemInInventory.type.maxDurability
+                            val nowInInventory = maxInInventory - itemInInventory.durability
                             if(nowInInventory > 2){
+                                removeOneItemFromInventory(inv,itemInInventory)
                                 inv.setItemInMainHand(itemInInventory)
                                 inv.addItem(item)
                                 discovered = true
@@ -150,6 +151,7 @@ object ToolListener : Listener {
     private fun getItemStackListFromMaterial(inventory:Inventory,material:Material):MutableList<ItemStack> {
         val list = mutableListOf<ItemStack>()
         for(item in inventory.contents){
+            if(item == null)continue
             if(item.type == material){
                 list.add(item)
             }
@@ -157,6 +159,22 @@ object ToolListener : Listener {
         return list
     }
 
+    private fun removeOneItemFromInventory(inventory: Inventory,itemStack: ItemStack){
+        var index = 0
+        for(item in inventory.contents){
+            if(item == null)continue
+            if(item == itemStack){
+                index++
+            }
+        }
+        if(index <= 0)return
+        inventory.remove(itemStack)
+        index--
+        if(index == 0)return
+        for(i in 1..index){
+            inventory.addItem(itemStack)
+        }
+    }
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
         if (!enabled) return
